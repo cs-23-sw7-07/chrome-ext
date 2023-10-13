@@ -5,13 +5,19 @@
     "version": "0.1",
     "action": {
       "default_popup": "popup/popup.html",
-      "default_icon": "default_icon.png"
+      "default_icon": "src/default_icon.png"
     },
     "content_scripts": [
         {
-            "js": ["scripts/content.js"],
+            "js": [],
             "matches": [
-                "https://*/*"
+                "https://open.spotify.com/*"
+            ]
+        },
+        {
+            "js": [],
+            "matches": [
+                "https://soundcloud.com/*"
             ]
         }
     ]
