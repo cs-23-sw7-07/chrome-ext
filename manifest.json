@@ -7,11 +7,16 @@
       "default_popup": "popup/popup.html",
       "default_icon": "default_icon.png"
     },
+    "background": {
+        "service_worker": "service-worker.js"
+      },
+    "permissions": ["webRequest", "webRequestAuthProvider"],
+    "host_permissions": ["https://*/*/state"],
     "content_scripts": [
         {
-            "js": ["scripts/content.js"],
+            "js": ["scripts/spotify/content.js"],
             "matches": [
-                "https://*/*"
+                "https://open.spotify.com/*"
             ]
         }
     ]
