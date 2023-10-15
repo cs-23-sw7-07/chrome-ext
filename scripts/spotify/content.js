@@ -51,7 +51,7 @@ function handlePlaybackState(state) {
             return Promise.resolve(song)
         }
     }
-    return Promise.reject("Not a valid Playback state to consider")
+    return Promise.reject("Invalid Playback state to consider")
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
