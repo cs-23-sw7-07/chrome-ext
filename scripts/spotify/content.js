@@ -1,18 +1,27 @@
 const MIN_LISTEN_TIME = 10_000
 
 class Song {
-    constructor(titel, album, artists) {
+    constructor(titel, album, artists, isrc) {
         this.titel = titel;
         this.album = album;
         this.artists = artists;
+        this.isrc = isrc
     }
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (!sender.tab && request.type == "NewState") {
+        handleNewState().finally(() => {
+            sendResponse()
+        })
+    }
+});
+
 
 function handleNewState() {
     return getAccessToken()
         .then(getPlaybackState)
         .then(handlePlaybackState)
-        
         .then(temp => {
             console.log(temp)
         })
@@ -47,17 +56,32 @@ function handlePlaybackState(state) {
         }
         else if (prev_track_id != track.id) {
             prev_track_id = track.id
-            let song = new Song(track.name, track.album.name, track.artists.map(artist => artist.name))
+            let song = new Song(track.name, track.album.name, track.artists.map(artist => artist.name), track.external_ids.isrc)
             return Promise.resolve(song)
         }
     }
     return Promise.reject("Invalid Playback state to consider")
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (!sender.tab && request.type == "NewState") {
-        handleNewState().finally(() => {
-            sendResponse()
-        })
+
+
+
+
+function saveTracksforUser(songs) {
+    let track_ids = []
+    songs.forEach(song => {
+        
+    });
+}
+
+function getTrackIdBySong(song) {
+    if (song.isrc != "") {
+
     }
-});
+}
+
+function searchTrack(params) {
+    params["type"] = "track"
+    params["limit"] = 1
+    return fetch('https://api.spotify.com/v1/search?' + (new URLSearchParams(params)).toString())
+}
