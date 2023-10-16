@@ -1,13 +1,8 @@
 const MIN_LISTEN_TIME = 10_000
 
-class Song {
-    constructor(titel, album, artists, isrc) {
-        this.titel = titel;
-        this.album = album;
-        this.artists = artists;
-        this.isrc = isrc
-    }
-}
+// import { Handler } from "../handler";
+// import { Operator } from "../operater"; 
+import { Song } from "../models/song"
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (!sender.tab && request.type == "NewState") {
@@ -17,6 +12,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+// class SpotifyHandler extends Handler {
+
+// }
 
 function handleNewState() {
     return getAccessToken()
@@ -70,13 +68,16 @@ function handlePlaybackState(state) {
 function saveTracksforUser(songs) {
     let track_ids = []
     songs.forEach(song => {
-        
+        track_ids.push(getTrackIdBySong(song))
     });
+    
 }
 
 function getTrackIdBySong(song) {
-    if (song.isrc != "") {
-
+    let params = {}
+    if (song.isrc != undefined) {
+        params["q"] = "isrc:" + song.isrc
+        return searchTrack(params)
     }
 }
 
