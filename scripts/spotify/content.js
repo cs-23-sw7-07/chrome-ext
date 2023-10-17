@@ -12,10 +12,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-// class SpotifyHandler extends Handler {
-
-// }
-
 function handleNewState() {
     return getAccessToken()
         .then(getPlaybackState)
@@ -70,15 +66,33 @@ function saveTracksforUser(songs) {
     songs.forEach(song => {
         track_ids.push(getTrackIdBySong(song))
     });
-    
+
+    const chunkSize = 50;
+    for (let i = 0; i < array.length; i += chunkSize) {
+        const chunk = track_ids.slice(i, i + chunkSize);
+        fetch("https://api.spotify.com/v1/me/tracks", {
+            method: "PUT",
+            headers: new Headers({
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            }),
+            body: JSON.stringify({ ids: chunk })
+        }).catch(err => {
+            //Do somenthing
+        })
+    }
+
 }
 
 function getTrackIdBySong(song) {
     let params = {}
     if (song.isrc != undefined) {
-        params["q"] = "isrc:" + song.isrc
-        return searchTrack(params)
+        params["q"] = `isrc:${song.isrc}`
     }
+    else {
+        params["q"] = `album:${song.album} artist:${song.artists.join(" ")}, track:${song.titel}`
+    }
+    return searchTrack(params)
 }
 
 function searchTrack(params) {

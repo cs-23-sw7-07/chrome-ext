@@ -3,13 +3,11 @@ export class Handler {
         
     }
 
-    saveSong() {
+    listenSong() {}
 
-    }
+    addSongToPlaylist() {}
 
-    loadSong() {
-        
-    }
+    loadSong() {}
 
     loadPlaylist() {
         
