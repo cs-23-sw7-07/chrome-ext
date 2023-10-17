@@ -93,6 +93,8 @@ function getTrackIdBySong(song) {
         params["q"] = `album:${song.album} artist:${song.artists.join(" ")}, track:${song.titel}`
     }
     return searchTrack(params)
+        .then(response => response.json())
+        .then(response => response.tracks.items[0].id)
 }
 
 function searchTrack(params) {
