@@ -1,7 +1,5 @@
 const MIN_LISTEN_TIME = 10_000
-
-// import { Handler } from "../handler";
-// import { Operator } from "../operater"; 
+ 
 import { Song } from "../models/song"
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -86,19 +84,17 @@ function saveTracksforUser(songs) {
 
 function getTrackIdBySong(song) {
     let params = {}
+    params["type"] = "track"
+    params["limit"] = 1
+
     if (song.isrc != undefined) {
         params["q"] = `isrc:${song.isrc}`
     }
     else {
         params["q"] = `album:${song.album} artist:${song.artists.join(" ")}, track:${song.titel}`
     }
-    return searchTrack(params)
+    
+    return fetch('https://api.spotify.com/v1/search?' + (new URLSearchParams(params)).toString())
         .then(response => response.json())
         .then(response => response.tracks.items[0].id)
-}
-
-function searchTrack(params) {
-    params["type"] = "track"
-    params["limit"] = 1
-    return fetch('https://api.spotify.com/v1/search?' + (new URLSearchParams(params)).toString())
 }

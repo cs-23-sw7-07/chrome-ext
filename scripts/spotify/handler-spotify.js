@@ -1,6 +1,6 @@
 import { Song } from "../models/song"
 
-class SpotifyHandler extends Handler {
+export class SpotifyHandler extends Handler {
     constructor() {
         this.prev_track_id = undefined
     }
